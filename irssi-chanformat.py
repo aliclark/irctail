@@ -12,7 +12,9 @@ hits = {}
 counts = {'grey': 0, 'blue': 0, 'green': 0, 'cyan': 0, 'red': 0, 'magenta': 0}
 allocated  = {}
 
-def format_chan(text, channel=None):
+textmatcher = {}
+
+def format_chan(after, channel=None):
     global maxlen
     chanstr = ''
 
@@ -22,7 +24,13 @@ def format_chan(text, channel=None):
         il.uplogs(chancolor, hits)
         chanstr = il.getmaxpad(channel, maxlen) + chancolor + channel + il.clearseq + ' '
 
-    return chanstr + text
+        for u,c in allocated.items():
+            if u not in textmatcher:
+                textmatcher[u] = re.compile('((' + il.crankseq + ')|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
+
+            after = re.sub(textmatcher[u], '\\1' + c + '\\5' + il.clearseq + '\\6', after)
+
+    return chanstr + after
 
 def main():
     chanmatcher = re.compile('^((#[^\t]+)\t)?(.*)')
