@@ -51,6 +51,9 @@ irssi-chanshift.py
 irssi-chanformat.py
   Right aligns and colorizes channel names that were added by irctail-spawn.sh
 
+irssi-nameformat.py
+  Right aligns and colorizes user names, and occurrences of them in text
+
 irssi-colorize.py
   Interprets IRC color sequences and prints equivalent bash escape sequences
 
