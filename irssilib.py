@@ -61,6 +61,9 @@ def getcolor(s, allocated, counts, hits):
         allocated[s] = pick_color(counts, hits)
     return allocated[s]
 
+# This has problem of #andoroid and #android-dev sharing common
+# substring a quick fix would be to not highlight if the match ends in
+# '-' eg. [^\w-]
 def text_colorize(after, textmatcher, allocated):
     for u,c in allocated.items():
         if u not in textmatcher:
