@@ -12,7 +12,7 @@ user@host $ tailf /tmp/irssitail | irssitail.colorize.py >>/tmp/feed
 In practice this is implemented as:
 
 user@host $ while true; do ~/build/irctail/irctail-spawn.sh; sleep 10; done
-user@host $ ~/irssi.aclark.theme.py &
+user@host $ cd ~/build/irctail/; ./irssi.aclark.theme.py &
 
 The continuous loop above allows to pick up any channels you join later on.
 This could alternatively be put in a crontab.
