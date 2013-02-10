@@ -23,12 +23,7 @@ def format_chan(after, channel=None):
         chancolor = il.getcolor(channel, allocated, counts, hits)
         il.uplogs(chancolor, hits)
         chanstr = il.getmaxpad(channel, maxlen) + chancolor + channel + il.clearseq + ' '
-
-        for u,c in allocated.items():
-            if u not in textmatcher:
-                textmatcher[u] = re.compile('((' + il.crankseq + ')|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
-
-            after = re.sub(textmatcher[u], '\\1' + c + '\\5' + il.clearseq + '\\6', after)
+        after = il.text_colorize(after, textmatcher, allocated)
 
     return chanstr + after
 

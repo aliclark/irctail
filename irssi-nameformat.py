@@ -21,13 +21,7 @@ def gotname(before, name, after):
     maxlen = il.getmaxlen(name, maxlen)
     color = il.getcolor(namet, allocated, counts, hits)
     il.uplogs(color, hits)
-
-    for u,c in allocated.items():
-        if u not in textmatcher:
-            textmatcher[u] = re.compile('((' + il.crankseq + ')|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
-
-        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + il.clearseq + '\\6', after)
-
+    after = il.text_colorize(after, textmatcher, allocated)
     return before + il.getmaxpad(name, maxlen) + color + name + il.clearseq + after
 
 def main():

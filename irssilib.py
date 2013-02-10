@@ -1,8 +1,12 @@
 
+import re
+
 # private
 pallette = {'grey': '\x38', 'blue': '\x39', 'green': '\x3a', 'cyan': '\x3b', 'red': '\x3c', 'magenta': '\x3d'}
 
 clearseq = '\x04\x67'
+
+# private
 crankseq = '\x04\x65'
 
 def getmaxlen(s, maxlen):
@@ -56,3 +60,12 @@ def getcolor(s, allocated, counts, hits):
     if s not in allocated:
         allocated[s] = pick_color(counts, hits)
     return allocated[s]
+
+def text_colorize(after, textmatcher, allocated):
+    for u,c in allocated.items():
+        if u not in textmatcher:
+            textmatcher[u] = re.compile('((' + crankseq + ')|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
+
+        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + clearseq + '\\6', after)
+
+    return after
