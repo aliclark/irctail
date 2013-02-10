@@ -148,11 +148,15 @@ def main():
                         curstate['bold'] = True
                         curstate['fg'] = None
                         curstate['bg'] = None
+                        state = 0
+                    elif c == '\x04':
+                        # i've inserted some of these myself
+                        log('got EOT')
+                        state = 1
                     else:
                         log('got c: ' + c + ' (' + hex(ord(c)) + ')')
                         buf.append((c, curstate))
-
-                    state = 0
+                        state = 0
 
                 else:
                     error('unknown state: ' + str(state))
