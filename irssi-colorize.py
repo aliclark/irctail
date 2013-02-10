@@ -1,0 +1,173 @@
+#!/usr/bin/python
+
+from __future__ import print_function
+
+import sys
+import termcolor
+
+# colors as used by termcolor:
+# {'blue': 34, 'grey': 30, 'yellow': 33, 'green': 32, 'cyan': 36, 'magenta': 35, 'white': 37, 'red': 31}
+
+# TODO: fill in the gaps
+fgattrs = {
+    '\x32': (False, 'green'),
+    '\x33': (False, 'cyan'),
+    '\x35': (False, 'magenta'),
+    '\x38': (True,  'grey'),
+    '\x39': (True,  'blue'),
+    '\x3a': (True,  'green'),
+    '\x3b': (True,  'cyan'),
+    '\x3c': (True,  'red'),
+    '\x3d': (True,  'magenta'),
+    }
+
+level_log = False
+level_warn = True
+level_error = True
+
+if len(sys.argv) > 1:
+    level_log = True
+
+def log(x):
+    if level_log:
+        print(x, file=sys.stderr)
+
+def warn(x):
+    if level_warn:
+        print(x, file=sys.stderr)
+
+def error(x):
+    if level_error:
+        print(x, file=sys.stderr)
+
+def newlook():
+    return {'bold':False,'fg':None,'bg':None}
+
+def main():
+    curstate = newlook()
+    state = 0
+    buf = None
+
+    try:
+        line = sys.stdin.readline()
+        while line:
+            buf = []
+
+            for c in line:
+
+                if state == 0:
+                    if c == '\x04':
+                        log('got EOT')
+                        state = 1
+                    elif c == '\x03':
+                        log('got ETX')
+                        state = 3
+                    elif c == '\x0f':
+                        log('reset state')
+                        curstate = newlook()
+                    else:
+                        log('got c: ' + c + ' (' + hex(ord(c)) + ')')
+                        buf.append((c, curstate))
+
+                elif state == 1:
+                    if c == '\x63':
+                        curstate = curstate.copy()
+                        curstate['bold'] = not curstate['bold']
+                        log('toggle bold, now ' + str(curstate['bold']))
+                        state = 0
+                    elif c == '\x65':
+                        log('going crankmode')
+                        # This type only lasts up to \n - doesn't reset colours properly
+                        # I don't like this format
+                        state = 4
+                    elif c == '\x67':
+                        log('reset state')
+                        curstate = newlook()
+                        state = 0
+                    elif c == '\x69':
+                        # not sure entirely what this one is
+                        log('x69')
+                        state = 0
+                    else:
+                        log('read fg attr: ' + c + ' (' + hex(ord(c)) + ')')
+
+                        if c in fgattrs:
+                            curstate = curstate.copy()
+                            curstate['bold'] = fgattrs[c][0]
+                            curstate['fg'] = fgattrs[c][1]
+                        else:
+                            warn('unknown at fg attr: ' + c + ' (' + hex(ord(c)) + ')')
+
+                        state = 2
+
+                elif state == 2:
+                    log('read attr2: ' + c + ' (' + hex(ord(c)) + ')')
+                    curstate = curstate.copy()
+
+                    if c == '\x2f':
+                        curstate['bg'] = None
+                    else:
+                        warn('unknown at bg attr: ' + c + ' (' + hex(ord(c)) + ')')
+
+                    state = 0
+
+                elif state == 3:
+                    # It is impossible to correctly parse this type of color format.
+                    # The format is TEXT ^C BYTE [BYTE] TEXT
+                    # where byte can be a valid text char...
+                    # The following are all cases I've seen where it
+                    # was just one byte, I don't have time to write a
+                    # fuzzy parser for multi bytes
+
+                    curstate = curstate.copy()
+
+                    if c == '\x33':
+                        curstate['bold'] = False
+                        curstate['fg'] = 'green'
+                    elif c == '\x34':
+                        curstate['bold'] = True
+                        curstate['fg'] = 'red'
+                    elif c == '\x37':
+                        curstate['bold'] = False
+                        curstate['fg'] = 'yellow'
+                    else:
+                        warn('unknown at bg attr: ' + c + ' (' + hex(ord(c)) + ')')
+
+                    state = 0
+
+                elif state == 4:
+                    if c == '\x02':
+                        curstate = curstate.copy()
+                        curstate['bold'] = True
+                        curstate['fg'] = None
+                        curstate['bg'] = None
+                    else:
+                        log('got c: ' + c + ' (' + hex(ord(c)) + ')')
+                        buf.append((c, curstate))
+
+                    state = 0
+
+                else:
+                    error('unknown state: ' + str(state))
+
+            for c in buf:
+                attrs = []
+                if c[1]['bold']:
+                    attrs.append('bold')
+
+                print(termcolor.colored(c[0], c[1]['fg'], c[1]['bg'], attrs), end='')
+
+                if c[0] == '\n':
+                    sys.stdout.flush()
+
+                if c[0] == '\n':
+                    # this is a bit overkill but there was at least one state that needed it
+                    curstate = newlook()
+
+            line = sys.stdin.readline()
+
+    except KeyboardInterrupt:
+        log('closing')
+
+if __name__ == '__main__':
+    main()

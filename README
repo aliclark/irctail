@@ -1,0 +1,68 @@
+
+
+irctail - Read all IRC channels in one terminal
+
+
+The general idea is to tailf multiple irssi log files into a single one, and
+tailf from that into a pretty colorized file:
+
+user@host $ for x in irclogs/*; do tailf $x | sed /^/$x/ >>/tmp/irssitail & ; done
+user@host $ tailf /tmp/irssitail | irssitail.colorize.py >>/tmp/feed
+
+In practice this is implemented as:
+
+user@host $ while true; do ~/build/irctail/irctail-spawn.sh; sleep 10; done
+user@host $ ~/irssi.aclark.theme.py &
+
+The continuous loop above allows to pick up any channels you join later on.
+This could alternatively be put in a crontab.
+
+To view the results a simple tailf will do, but screen is useful to rewrap the
+text when resizing the terminal:
+
+user@host$ screen tailf /tmp/feed
+
+The reason for a separate /tmp/irssitail and /tmp/feed is to give room to tailf
+lots of different (non IRC) things into /tmp/feed, and so only one instance of
+the output colorizer is needed, instead of one per channel.
+
+Put this (or similar) in .irssi/config:
+  "fe-common/core" = {
+    autolog = "yes";
+    autolog_level = "all -joins -parts -quits";
+    autolog_colors = "yes";
+  };
+
+
+Files:
+
+irctail-spawn.sh
+  Checks for any new log files to tailf into /tmp/irssitail
+  (also prepends the channel name to each line)
+
+irctail-reap.sh
+  Kills any old (or all) tailf's created by irctail-spawn.sh
+  Only run this if you have rotating logs and want to kill tailf's on
+  logs that have been rotated out.
+
+irssi-chanformat.py
+  Right aligns and colorizes channel names that were added by irctail-spawn.sh
+
+irssi-colorize.py
+  Interprets IRC color sequences and prints equivalent bash escape sequences
+
+irssi.aclark.theme.py
+  Pipes /tmp/irssitail through chanformat and colorize, outputting to /tmp/feed
+
+Improvements welcome :)
+
+
+If /tmp/feed or /tmp/irssitail grow too large, just do:
+
+user@host $ printf '' >/tmp/feed; printf '' >/tmp/irssitail
+
+
+tail -F can be used with multiple files (instead of spawning one per log), but
+in that case we'd need to pipe into a program to reformat "==> #python.log <=="
+style lines, which is more faff than just using sed
+
