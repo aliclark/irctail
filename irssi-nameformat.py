@@ -24,11 +24,11 @@ def gotname(before, name, after):
 
     for u,c in allocated.items():
         if u not in textmatcher:
-            textmatcher[u] = re.compile('((\x04\x65)|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
+            textmatcher[u] = re.compile('((' + il.crankseq + ')|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
 
-        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + '\x04\x67' + '\\6', after)
+        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + il.clearseq + '\\6', after)
 
-    return before + il.getmaxpad(name, maxlen) + color + name + '\x04\x67' + after
+    return before + il.getmaxpad(name, maxlen) + color + name + il.clearseq + after
 
 def main():
     # try to match two columns and a 3rd name column

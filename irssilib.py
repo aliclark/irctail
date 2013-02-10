@@ -2,6 +2,9 @@
 # private
 pallette = {'grey': '\x38', 'blue': '\x39', 'green': '\x3a', 'cyan': '\x3b', 'red': '\x3c', 'magenta': '\x3d'}
 
+clearseq = '\x04\x67'
+crankseq = '\x04\x65'
+
 def getmaxlen(s, maxlen):
     if len(s) > maxlen:
         return len(s)

@@ -20,7 +20,7 @@ def format_chan(text, channel=None):
         maxlen = il.getmaxlen(channel, maxlen)
         chancolor = il.getcolor(channel, allocated, counts, hits)
         il.uplogs(chancolor, hits)
-        chanstr = il.getmaxpad(channel, maxlen) + chancolor + channel + '\x04\x67' + ' '
+        chanstr = il.getmaxpad(channel, maxlen) + chancolor + channel + il.clearseq + ' '
 
     return chanstr + text
 
