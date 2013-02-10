@@ -43,7 +43,14 @@ def error(x):
 def newlook():
     return {'bold':False,'fg':None,'bg':None}
 
+def lookeq(x, y):
+    return (x['bold'] == y['bold']) and (x['fg'] == y['fg']) and (x['bg'] == y['bg'])
+
+defaultlook = newlook()
+
 def main():
+    clearseq = '\x1b[0m'
+    printingstate = newlook()
     curstate = newlook()
     state = 0
     buf = None
@@ -151,18 +158,32 @@ def main():
                     error('unknown state: ' + str(state))
 
             for c in buf:
-                attrs = []
-                if c[1]['bold']:
-                    attrs.append('bold')
+                if lookeq(printingstate, c[1]):
+                    print(c[0], end='')
+                else:
+                    if (lookeq(c[1], defaultlook) or
+                        (printingstate['bold'] and (not c[1]['bold'])) or
+                        (printingstate['fg'] and (not c[1]['fg'])) or
+                        (printingstate['bg'] and (not c[1]['bg']))):
+                        print(clearseq, end='')
 
-                print(termcolor.colored(c[0], c[1]['fg'], c[1]['bg'], attrs), end='')
+                    printingstate = c[1]
+                    attrs = []
+                    if c[1]['bold']:
+                        attrs.append('bold')
 
-                if c[0] == '\n':
-                    sys.stdout.flush()
+                    # use [:-4] to remove the clear sequence
+                    print(termcolor.colored(c[0], c[1]['fg'], c[1]['bg'], attrs)[:-4], end='')
 
                 if c[0] == '\n':
                     # this is a bit overkill but there was at least one state that needed it
-                    curstate = newlook()
+                    if not lookeq(curstate, defaultlook):
+                        # if we hit newline c[1] == curstate by definition
+                        print(clearseq, end='')
+                        curstate = newlook()
+                        printingstate = curstate
+
+                    sys.stdout.flush()
 
             line = sys.stdin.readline()
 
