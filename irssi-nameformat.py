@@ -60,6 +60,8 @@ def get_color(s):
         users[s] = pick_color()
     return users[s]
 
+textmatcher = {}
+
 def gotname(before, name, after):
     # without leading operator tag
     namet = name[1:]
@@ -69,15 +71,10 @@ def gotname(before, name, after):
     colorized = color + name + '\x04\x67'
 
     for u,c in users.items():
-        # this is not ideal because
-        # a) one name may be a subset of another name
-        # b) a name might be a subset of another word
-        # unfortunately checking if the name is a substring of a word
-        # is complicated by the fact that color codes contain normal
-        # chars.
-        #
-        # TODO: check for names which are a subset of another
-        after = after.replace(u, c + u + '\x04\x67')
+        if u not in textmatcher:
+            textmatcher[u] = re.compile('((\x04\x65)|([^\w])|(^))(' + re.escape(u) + ')(([^\w])|($))')
+
+        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + '\x04\x67' + '\\6', after)
 
     return before + ((maxlen - len(name)) * ' ') + colorized + after
 
