@@ -63,7 +63,10 @@ def main():
             for c in line:
 
                 if state == 0:
-                    if c == '\x04':
+                    if c == '\x02':
+                        curstate = curstate.copy()
+                        curstate['bold'] = not curstate['bold']
+                    elif c == '\x04':
                         log('got EOT')
                         state = 1
                     elif c == '\x03':
