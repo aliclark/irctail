@@ -61,6 +61,23 @@ def getcolor(s, allocated, counts, hits):
         allocated[s] = pick_color(counts, hits)
     return allocated[s]
 
+# NOTE: this function could do with optimisation - it takes up
+# increasingly more CPU after a day of 30 busy channels - presumably
+# because of the regexp text replace on so many usernames.
+#
+# Potentially set a limit on the items in "allocated" to replace for,
+# so that once the limit is reached we are no longer replacing all
+# names. This would need to adapt if a given user starts posting
+# again.
+#
+# Either:
+# 1) only bump the counter when a user is referenced
+# 2) bump counter when user posts a message
+# 3) some combination of the above
+#
+# It is much cheaper to just do (2), and should still be quite
+# accurate.
+
 def text_colorize(after, textmatcher, allocated):
     for u,c in allocated.items():
         if u not in textmatcher:
