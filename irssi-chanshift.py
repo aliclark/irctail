@@ -6,7 +6,7 @@ import sys
 import re
 
 def main():
-    m = re.compile('^(\ *[^\ ]+)([\ \t])(\d\d:\d\d:\d\d)(.*)')
+    m = re.compile('^(\ *[^\ \t]+)([\ \t])([^\ \t]+)(.*)')
     try:
         line = sys.stdin.readline()
         while line:
