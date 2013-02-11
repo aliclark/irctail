@@ -9,7 +9,7 @@ import termcolor
 # {'blue': 34, 'grey': 30, 'yellow': 33, 'green': 32, 'cyan': 36, 'magenta': 35, 'white': 37, 'red': 31}
 
 # TODO: fill in the gaps
-fgattrs = {
+irssi_fgattrs = {
     '\x32': (False, 'green'),
     '\x33': (False, 'cyan'),
     '\x35': (False, 'magenta'),
@@ -98,10 +98,10 @@ def main():
                     else:
                         log('read fg attr: ' + c + ' (' + hex(ord(c)) + ')')
 
-                        if c in fgattrs:
+                        if c in irssi_fgattrs:
                             curstate = curstate.copy()
-                            curstate['bold'] = fgattrs[c][0]
-                            curstate['fg'] = fgattrs[c][1]
+                            curstate['bold'] = irssi_fgattrs[c][0]
+                            curstate['fg'] = irssi_fgattrs[c][1]
                         else:
                             warn('unknown at fg attr: ' + c + ' (' + hex(ord(c)) + ')')
 
