@@ -66,12 +66,12 @@ def main():
                     if c == '\x02':
                         curstate = curstate.copy()
                         curstate['bold'] = not curstate['bold']
-                    elif c == '\x04':
-                        log('got EOT')
-                        state = 1
                     elif c == '\x03':
                         log('got ETX')
                         state = 3
+                    elif c == '\x04':
+                        log('got EOT')
+                        state = 1
                     elif c == '\x0f':
                         log('reset state')
                         curstate = newlook()
