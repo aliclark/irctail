@@ -233,10 +233,10 @@ def main():
                         curstate['fg'] = None
                         curstate['bg'] = None
                         state = 0
-                    elif c == '\x04':
+                    elif c == '\x03':
                         # i've inserted some of these myself
                         log('got EOT')
-                        state = 1
+                        state = 3
                     else:
                         log('got c: ' + c + ' (' + hex(ord(c)) + ')')
                         buf.append((c, curstate))
