@@ -24,6 +24,8 @@ def gotname(before, name, after):
     after = il.text_colorize(after, textmatcher, allocated)
     return before + il.getmaxpad(name, maxlen) + color + name + il.clearseq + after
 
+# TODO: even if no match, perform colorization of text
+
 def main():
     # try to match two columns and a 3rd name column
     namematcher = re.compile('^(\ *[^\ \t]+[\ \t]+[^\ \t]+\ )[^<]*<([^\w]+[^>]+)>(.*)')

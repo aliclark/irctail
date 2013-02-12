@@ -27,6 +27,8 @@ def format_chan(after, channel=None):
 
     return chanstr + after
 
+# TODO: even if no match, perform colorization of text
+
 def main():
     chanmatcher = re.compile('^((#[^\t]+)\t)?(.*)')
     try:
