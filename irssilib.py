@@ -55,7 +55,12 @@ def pick_color(counts, hits):
         # Perhaps this should consider consecutive lines from the same
         # channel to be a single hit.
         #
-        # TODO: try to not assign the same color to names of similar length
+        # TODO: try to not assign the same color to names of similar
+        # length
+        #
+        # The length constraint is probably even more important than
+        # the other allocation metrics, since it helps greatly
+        # scanning text.
 
         if ((minn == None) or (v < minn) or
             ((v == minn) and (minh != None) and ((ch(k) not in hits) or (hits[ch(k)] < minh)))):
