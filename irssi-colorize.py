@@ -50,7 +50,28 @@ def lookeq(x, y):
 
 defaultlook = newlook()
 
-# It may be that 'white' should be normal and darkwhite should be dark
+# These were the old colors that I found by trial and error
+# (differences against marked out against what I thought were the true
+# colors)
+mirc_colors = [
+    ('white', True),
+    ('grey', False),
+    ('blue', True), # was normal blue (clash) v
+    ('green', False),
+    ('red', True),
+    ('red', False),
+    ('magenta', False),
+    ('yellow', False),
+    ('yellow', True),
+    ('green', True),
+    ('blue', True), # clash ^v
+    ('cyan', True), #
+    ('blue', True), # was normal cyan (clash) ^
+    ('magenta', True),
+    ('grey', True),
+    ('white', False),
+    ]
+
 mirc_colors = [
     ('white', True),
     ('grey', False),
