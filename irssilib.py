@@ -94,6 +94,13 @@ def getcolor(s, allocated, counts, hits):
 # It is much cheaper to just do (2), and should still be quite
 # accurate.
 
+# XXX: Quite annoying but potentially difficult to solve is that if
+# the name appears in an already colored sequence, the original color
+# will be cleared by the clearseq, as well as the name's colour
+#
+# Would need to parse backwards for an existing color to do this
+# right, or implement a push/pop control sequence
+
 def text_colorize(after, textmatcher, allocated):
     for u,c in allocated.items():
         if u not in textmatcher:
