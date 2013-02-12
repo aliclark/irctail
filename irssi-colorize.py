@@ -5,6 +5,10 @@ from __future__ import print_function
 import sys
 import termcolor
 
+# Good resource for ANSI escapes:
+# http://wiki.bash-hackers.org/scripting/terminalcodes
+# Good resource for mIRC colors:
+# http://www.mirc.com/colors.html
 
 # TODO: fill in the gaps
 irssi_fgattrs = {
