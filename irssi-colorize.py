@@ -5,8 +5,6 @@ from __future__ import print_function
 import sys
 import termcolor
 
-# colors as used by termcolor:
-# {'blue': 34, 'grey': 30, 'yellow': 33, 'green': 32, 'cyan': 36, 'magenta': 35, 'white': 37, 'red': 31}
 
 # TODO: fill in the gaps
 irssi_fgattrs = {
