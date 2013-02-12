@@ -70,12 +70,30 @@ mirc_colors = [
     ('white', False),
     ]
 
+def parsefg(s):
+    if ',' in s:
+        s = s[:s.index(',')]
+    n = int(''.join(s))
+    if n > 15:
+        log('crank mirc: ' + str(n))
+        # no idea where these came from
+        if n == 21:
+            return ('red', False)
+        elif n == 25:
+            return ('green', True)
+        return None
+    return mirc_colors[n]
+
+def parsebg(s):
+    return parsefg(s[s.index(',')+1:])
+
 def main():
     clearseq = '\x1b[0m'
     printingstate = newlook()
     curstate = newlook()
     state = 0
     buf = None
+    s3 = None
 
     try:
         line = sys.stdin.readline()
@@ -158,28 +176,30 @@ def main():
                     state = 0
 
                 elif state == 3:
-                    # It is impossible to correctly parse this type of color format.
-                    # The format is TEXT ^C BYTE [BYTE] TEXT
-                    # where byte can be a valid text char...
-                    # The following are all cases I've seen where it
-                    # was just one byte, I don't have time to write a
-                    # fuzzy parser for multi bytes
+                    # format is \x03N[,M]
+                    # at this point we've already received \x03
+                    # eg.
+                    # 1     (foreground black)
+                    # 10    (foreground cyan)
+                    # 1,2   (foreground black, background darkblue)
+                    # 1,10  (foreground black, background cyan)
+                    # 10,13 (foreground cyan, background violet)
+                    # 10,99 (foreground cyan, background transparent)
 
-                    curstate = curstate.copy()
-
-                    if c == '\x33':
-                        curstate['bold'] = False
-                        curstate['fg'] = 'green'
-                    elif c == '\x34':
-                        curstate['bold'] = True
-                        curstate['fg'] = 'red'
-                    elif c == '\x37':
-                        curstate['bold'] = False
-                        curstate['fg'] = 'yellow'
+                    s3 = []
+                    if c.isdigit():
+                        s3.append(c)
+                        state = 5
                     else:
-                        warn('unknown at bg attr: ' + c + ' (' + hex(ord(c)) + ')')
-
-                    state = 0
+                        # "A plain ^C can be used to turn off all
+                        # previous color attributes."
+                        # Here I take that to mean color attributes
+                        # set by *any* method, not just ^C
+                        curstate = curstate.copy()
+                        curstate['fg'] = None
+                        curstate['bg'] = None
+                        buf.append((c, curstate))
+                        state = 0
 
                 elif state == 4:
                     if c == '\x02':
@@ -194,6 +214,80 @@ def main():
                         state = 1
                     else:
                         log('got c: ' + c + ' (' + hex(ord(c)) + ')')
+                        buf.append((c, curstate))
+                        state = 0
+
+                elif state == 5:
+                    if c.isdigit():
+                        s3.append(c)
+                        state = 6
+                    elif c == ',':
+                        s3.append(c)
+                        state = 7
+                    else:
+                        curstate = curstate.copy()
+                        tmpx = parsefg(s3)
+                        curstate['fg'] = tmpx[0]
+                        curstate['bold'] = tmpx[1]
+                        buf.append((c, curstate))
+                        state = 0
+
+                elif state == 6:
+                    if c == ',':
+                        # if the bg part turns out to be bogus, we'll
+                        # still want to print the comma
+                        s3.append(c)
+                        state = 7
+                    else:
+                        # time to print using the new foreground
+                        curstate = curstate.copy()
+                        tmpx = parsefg(s3)
+                        curstate['fg'] = tmpx[0]
+                        curstate['bold'] = tmpx[1]
+                        buf.append((c, curstate))
+                        state = 0
+
+                # start parseing background
+                elif state == 7:
+                    if c.isdigit():
+                        # full sequence is now considered "valid"
+                        s3.append(c)
+                        state = 8
+                    else:
+                        # the comma must have been text
+                        curstate = curstate.copy()
+                        tmpx = parsefg(s3[:-1])
+                        curstate['fg'] = tmpx[0]
+                        curstate['bold'] = tmpx[1]
+                        buf.append((s3[-1], curstate))
+                        buf.append((c, curstate))
+                        state = 0
+
+                elif state == 8:
+                    if c.isdigit():
+                        s3.append(c)
+                        curstate = curstate.copy()
+                        tmpx = parsefg(s3)
+                        curstate['fg'] = tmpx[0]
+                        curstate['bold'] = tmpx[1]
+                        # TODO: can we involve "dark" on bg?
+                        tmpx = parsebg(s3)
+                        if tmpx:
+                            curstate['bg'] = tmpx[0]
+                        else:
+                            curstate['bg'] = None
+                        state = 0
+                    else:
+                        curstate = curstate.copy()
+                        tmpx = parsefg(s3)
+                        curstate['fg'] = tmpx[0]
+                        curstate['bold'] = tmpx[1]
+                        # TODO: can we involve "dark" on bg?
+                        tmpx = parsebg(s3)
+                        if tmpx:
+                            curstate['bg'] = tmpx[0]
+                        else:
+                            curstate['bg'] = None
                         buf.append((c, curstate))
                         state = 0
 
