@@ -148,9 +148,9 @@ def main():
 
                 elif state == 2:
                     log('read attr2: ' + c + ' (' + hex(ord(c)) + ')')
-                    curstate = curstate.copy()
 
                     if c == '\x2f':
+                        curstate = curstate.copy()
                         curstate['bg'] = None
                     else:
                         warn('unknown at bg attr: ' + c + ' (' + hex(ord(c)) + ')')
