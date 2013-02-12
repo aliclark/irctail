@@ -84,7 +84,7 @@ def getcolor(s, allocated, counts, hits):
 def text_colorize(after, textmatcher, allocated):
     for u,c in allocated.items():
         if u not in textmatcher:
-            textmatcher[u] = re.compile('((' + crankseq + ')|([^\w\-])|(^))(' + re.escape(u) + ')(([^\w\-])|($))')
+            textmatcher[u] = re.compile('((' + crankseq + ')|([^\w\-])|(^))(' + re.escape(u) + ')(([^\w\-])|($))', re.IGNORECASE)
 
         after = re.sub(textmatcher[u], '\\1' + c + '\\5' + clearseq + '\\6', after)
 
