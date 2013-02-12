@@ -50,6 +50,26 @@ def lookeq(x, y):
 
 defaultlook = newlook()
 
+# It may be that 'white' should be normal and darkwhite should be dark
+mirc_colors = [
+    ('white', True),
+    ('grey', False),
+    ('blue', False),
+    ('green', False),
+    ('red', True),
+    ('red', False),
+    ('magenta', False),
+    ('yellow', False),
+    ('yellow', True),
+    ('green', True),
+    ('blue', True),
+    ('cyan', True),
+    ('cyan', False),
+    ('magenta', True),
+    ('grey', True),
+    ('white', False),
+    ]
+
 def main():
     clearseq = '\x1b[0m'
     printingstate = newlook()
