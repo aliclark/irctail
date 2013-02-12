@@ -9,7 +9,7 @@ import irssilib as il
 maxlen = 0
 hits = {}
 
-counts = {'grey': 0, 'blue': 0, 'green': 0, 'cyan': 0, 'red': 0, 'magenta': 0}
+counts = {}
 allocated  = {}
 
 textmatcher = {}

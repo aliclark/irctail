@@ -31,7 +31,7 @@ def pick_color(counts, hits):
     minn = None
     minh = None
 
-    for (k,v) in counts.items():
+    for (k, v) in [(k, counts[k] if k in counts else 0) for k in pallette.keys()]:
         # Modified the color picking algorithm from basic round-robin:
         # In case of ties, give the color which appears to be least commonly used.
         # This is roughly as good as it gets, since we have no
@@ -52,6 +52,9 @@ def pick_color(counts, hits):
                 minh = hits[ch(k)]
             else:
                 minh = None
+
+    if not minc in counts:
+        counts[minc] = 0
 
     counts[minc] += 1
     return ch(minc)
