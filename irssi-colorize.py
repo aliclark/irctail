@@ -99,6 +99,18 @@ def main():
                     elif c == '\x0f':
                         log('reset state')
                         curstate = newlook()
+                    elif c == '\x13':
+                        log('strikethrough not implemented')
+                    elif c == '\x15':
+                        log('underline not implemented')
+                        # '\x1b[0;4m'
+                    elif c == '\x16':
+                        log('reverse not implemented')
+                        # '\x1b[0;7m'
+                    elif c == '\x1f':
+                        # same as underline?
+                        # '\x1b[0;4m'
+                        log('underline2 not implemented')
                     else:
                         log('got c: ' + c + ' (' + hex(ord(c)) + ')')
                         buf.append((c, curstate))
