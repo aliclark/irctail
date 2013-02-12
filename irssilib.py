@@ -2,7 +2,7 @@
 import re
 
 # private
-pallette = {'grey': '\x38', 'blue': '\x39', 'green': '\x3a', 'cyan': '\x3b', 'red': '\x3c', 'magenta': '\x3d'}
+pallette = {'white': '00', 'blue': '10', 'green': '09', 'cyan': '11', 'red': '04', 'magenta': '13', 'yellow': '08', 'grey': '14'}
 
 clearseq = '\x04\x67'
 
@@ -24,7 +24,7 @@ def uplogs(color, hits):
 
 # private
 def ch(c):
-    return '\x04' + pallette[c] + '\x2f'
+    return '\x03' + pallette[c] + ',99'
 
 def pick_color(counts, hits):
     minc = None
