@@ -54,7 +54,7 @@ irssi-chanformat.py
 irssi-nameformat.py
   Right aligns and colorizes user names, and occurrences of them in text
 
-irssi-colorize.py
+irc-colorize.py
   Interprets IRC color sequences and prints equivalent bash escape sequences
 
 irssi.aclark.theme.py
