@@ -1,6 +1,17 @@
 
 import re
 
+# TODO: use only minimal sequences necessary
+# ^Cf  if the name starts with a non-digit, non-comma character (and fg
+#      is <10) or the comma is followed by a non-digit
+# ^Cff if the name starts with a non-comma character or the comma is
+#      followed by a non-digit
+# ^Cff,99 otherwise
+
+# TODO: allow a list of colours we shouldn't use for highlighting,
+# because they would normally clash on the background colour
+forbidden = []
+
 # private
 pallette = {'white': '00', 'blue': '10', 'green': '09', 'cyan': '11', 'red': '04', 'magenta': '13', 'yellow': '08', 'grey': '14'}
 
@@ -43,6 +54,8 @@ def pick_color(counts, hits):
         # in the last line on a different channel, but that's probably coincidence.
         # Perhaps this should consider consecutive lines from the same
         # channel to be a single hit.
+        #
+        # TODO: try to not assign the same color to names of similar length
 
         if ((minn == None) or (v < minn) or
             ((v == minn) and (minh != None) and ((ch(k) not in hits) or (hits[ch(k)] < minh)))):
