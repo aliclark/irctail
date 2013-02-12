@@ -108,6 +108,10 @@ def parsefg(s):
 def parsebg(s):
     return parsefg(s[s.index(',')+1:])
 
+# FIXME:
+# A lot of the time where I've done state=0;buf.append(c) it should
+# instead do state=0 and then reinterpret the character in that state.
+
 def main():
     clearseq = '\x1b[0m'
     printingstate = newlook()
