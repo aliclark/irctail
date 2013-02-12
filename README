@@ -45,10 +45,10 @@ irctail-reap.sh
   Only run this if you have rotating logs and want to kill tailf's on
   logs that have been rotated out.
 
-irssi-chanshift.py
+irc-chanshift.py
   Swaps the position of the timestamp and channel name
 
-irssi-chanformat.py
+irc-chanformat.py
   Right aligns and colorizes channel names that were added by irctail-spawn.sh
 
 irssi-nameformat.py
