@@ -45,6 +45,9 @@ irctail-reap.sh
   Only run this if you have rotating logs and want to kill tailf's on
   logs that have been rotated out.
 
+irc-colorize.py
+  Interprets IRC color sequences and prints equivalent bash escape sequences
+
 irc-chanshift.py
   Swaps the position of the timestamp and channel name
 
@@ -53,9 +56,6 @@ irc-chanformat.py
 
 irssi-nameformat.py
   Right aligns and colorizes user names, and occurrences of them in text
-
-irc-colorize.py
-  Interprets IRC color sequences and prints equivalent bash escape sequences
 
 irssi.aclark.theme.py
   Pipes /tmp/irssitail through chanformat and colorize, outputting to /tmp/feed
