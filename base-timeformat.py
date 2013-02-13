@@ -23,6 +23,7 @@ def main():
             line = stamp_to_time(r.group(1)) + r.group(2) + r.group(3) + '\n'
 
         print(line, end='')
+        sys.stdout.flush()
         line = sys.stdin.readline()
 
 if __name__ == '__main__':
