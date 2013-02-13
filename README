@@ -60,6 +60,15 @@ irssi-nameformat.py
 irssi.aclark.theme.py
   Pipes /tmp/irssitail through chanformat and colorize, outputting to /tmp/feed
 
+base-nameformat.py
+  Right aligns and colorizes user names, and occurrences of them in text
+
+base-timeformat.py
+  Replaces millistamps with HH:MM:SS format strings
+
+base.aclark.theme.py
+  Pipes /tmp/irctail through chanformat and colorize, outputting to /tmp/feed
+
 Improvements welcome :)
 
 
