@@ -3,7 +3,7 @@
 from __future__ import print_function
 
 import sys
-import termcolor
+import termcolor_1_1_0 as termcolor
 
 # Good resource for ANSI escapes:
 # http://wiki.bash-hackers.org/scripting/terminalcodes
