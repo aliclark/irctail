@@ -77,21 +77,21 @@ mirc_colors = [
 # a toggle should not turn boldness off i think
 mirc_colors = [
     ('white', True),
-    ('grey', False),
-    ('blue', False),
-    ('green', False),
+    ('grey', None),
+    ('blue', None),
+    ('green', None),
     ('red', True),
-    ('red', False),
-    ('magenta', False),
-    ('yellow', False),
+    ('red', None),
+    ('magenta', None),
+    ('yellow', None),
     ('yellow', True),
     ('green', True),
-    ('cyan', False),
+    ('cyan', None),
     ('cyan', True),
     ('blue', True),
     ('magenta', True),
     ('grey', True),
-    ('white', False),
+    ('white', None),
     ]
 
 def parsefg(s):
