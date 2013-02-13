@@ -253,7 +253,7 @@ def main():
                         curstate = curstate.copy()
                         tmpx = parsefg(s3)
                         curstate['fg'] = tmpx[0]
-                        curstate['bold'] = tmpx[1]
+                        curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
                         buf.append((c, curstate))
                         state = 0
 
@@ -268,7 +268,7 @@ def main():
                         curstate = curstate.copy()
                         tmpx = parsefg(s3)
                         curstate['fg'] = tmpx[0]
-                        curstate['bold'] = tmpx[1]
+                        curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
                         buf.append((c, curstate))
                         state = 0
 
@@ -283,7 +283,7 @@ def main():
                         curstate = curstate.copy()
                         tmpx = parsefg(s3[:-1])
                         curstate['fg'] = tmpx[0]
-                        curstate['bold'] = tmpx[1]
+                        curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
                         buf.append((s3[-1], curstate))
                         buf.append((c, curstate))
                         state = 0
@@ -294,7 +294,7 @@ def main():
                         curstate = curstate.copy()
                         tmpx = parsefg(s3)
                         curstate['fg'] = tmpx[0]
-                        curstate['bold'] = tmpx[1]
+                        curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
                         # TODO: can we involve "dark" on bg?
                         tmpx = parsebg(s3)
                         if tmpx:
@@ -306,7 +306,7 @@ def main():
                         curstate = curstate.copy()
                         tmpx = parsefg(s3)
                         curstate['fg'] = tmpx[0]
-                        curstate['bold'] = tmpx[1]
+                        curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
                         # TODO: can we involve "dark" on bg?
                         tmpx = parsebg(s3)
                         if tmpx:
