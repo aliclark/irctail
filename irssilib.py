@@ -13,7 +13,7 @@ import re
 forbidden = []
 
 # private
-pallette = {'white': '00', 'blue': '10', 'green': '09', 'cyan': '11', 'red': '04', 'magenta': '13', 'yellow': '08', 'grey': '14'}
+pallette = {'white': '00', 'blue': '12', 'green': '09', 'cyan': '11', 'red': '04', 'magenta': '13', 'yellow': '08', 'grey': '14'}
 
 clearseq = '\x04\x67'
 
