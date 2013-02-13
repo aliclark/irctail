@@ -72,6 +72,9 @@ mirc_colors = [
     ('white', False),
     ]
 
+# I think this model of color is incorrect,
+# the bold colours are only coincidentally bold,
+# a toggle should not turn boldness off i think
 mirc_colors = [
     ('white', True),
     ('grey', False),
