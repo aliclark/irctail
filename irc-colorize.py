@@ -112,8 +112,6 @@ def main():
                     if state == 0:
                         if c == '\x02':
                             curstate = curstate.copy()
-                            # I'm not sure but some things may expect fg=white here
-                            curstate['fg'] = 'white'
                             curstate['bold'] = not curstate['bold']
                         elif c == '\x03':
                             log('got ETX')
