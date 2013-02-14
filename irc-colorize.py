@@ -319,7 +319,7 @@ def main():
                     if printingstate['bg'] == c[1]['bg']:
                         bg = None
                     else:
-                        bg = c[1]['bg']
+                        bg = 'on_' + c[1]['bg']
 
                     if (printingstate['bold'] == c[1]['bold']) or (not c[1]['bold']):
                         attrs = None
