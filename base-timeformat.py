@@ -9,8 +9,11 @@ import datetime
 stamp_format = '%H:%M:%S'
 
 def stamp_to_time(x):
-    x = int(x)
-    return datetime.datetime.fromtimestamp(round(x / 1000.0)).strftime(stamp_format)
+    try:
+        x = int(x)
+        return datetime.datetime.fromtimestamp(round(x / 1000.0)).strftime(stamp_format)
+    except:
+        return None
 
 def main():
     reg = re.compile('^(\ *[^\ \t]+)([\ \t])(.*)')
@@ -20,7 +23,9 @@ def main():
         r = reg.match(line)
 
         if r:
-            line = stamp_to_time(r.group(1)) + r.group(2) + r.group(3) + '\n'
+            t = stamp_to_time(r.group(1))
+            if t:
+                line = t + r.group(2) + r.group(3) + '\n'
 
         print(line, end='')
         sys.stdout.flush()
