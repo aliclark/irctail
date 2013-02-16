@@ -37,10 +37,23 @@ def uplogs(color, hits):
 def ch(c):
     return '\x03' + pallette[c] + ',99'
 
-def pick_color(counts, hits):
+def pick_color(name, allocated, counts, hits):
+    l = len(name)
+
     minc = None
     minn = None
     minh = None
+    minl = None
+
+    ds = {}
+
+    for k in pallette.keys():
+        ds[ch(k)] = -1
+
+    for k,v in allocated.items():
+        kl = abs(len(k) - l)
+        if (ds[v] == -1) or (ds[v] > kl):
+            ds[v] = kl
 
     for (k, v) in [(k, counts[k] if k in counts else 0) for k in pallette.keys()]:
         # Modified the color picking algorithm from basic round-robin:
@@ -55,17 +68,19 @@ def pick_color(counts, hits):
         # Perhaps this should consider consecutive lines from the same
         # channel to be a single hit.
         #
-        # TODO: try to not assign the same color to names of similar
-        # length
-        #
-        # The length constraint is probably even more important than
-        # the other allocation metrics, since it helps greatly
-        # scanning text.
+        # TODO: This will fall back to aggregate counts if all colors
+        # have already allocated an item with same string length -
+        # this is sub-optimal, should be using per color, per string
+        # length counts
 
-        if ((minn == None) or (v < minn) or
-            ((v == minn) and (minh != None) and ((ch(k) not in hits) or (hits[ch(k)] < minh)))):
+        if ((ds[ch(k)] == -1) or ((minl != -1) and (ds[ch(k)] > minl)) or
+            ((ds[ch(k)] == minl) and
+             ((minn == None) or (v < minn) or
+              ((v == minn) and (minh != None) and
+               ((ch(k) not in hits) or (hits[ch(k)] < minh)))))):
             minc = k
             minn = v
+            minl = ds[ch(k)]
             if ch(k) in hits:
                 minh = hits[ch(k)]
             else:
@@ -79,7 +94,7 @@ def pick_color(counts, hits):
 
 def getcolor(s, allocated, counts, hits):
     if s not in allocated:
-        allocated[s] = pick_color(counts, hits)
+        allocated[s] = pick_color(s, allocated, counts, hits)
     return allocated[s]
 
 # NOTE: this function could do with optimisation - it takes up
