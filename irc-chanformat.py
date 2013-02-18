@@ -30,7 +30,7 @@ def format_chan(after, channel=None):
 # TODO: even if no match, perform colorization of text
 
 def main():
-    chanmatcher = re.compile('^((#[^\t]+)\t)?(.*)')
+    chanmatcher = re.compile('^((#?[^\t]+)\t)?(.*)')
     try:
         line = sys.stdin.readline()
         while line:
