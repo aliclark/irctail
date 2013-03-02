@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import sys
 import re
-import irssilib as il
+import ircformatlib as il
 
 maxlen = 0
 hits = {}
