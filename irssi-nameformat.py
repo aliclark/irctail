@@ -37,6 +37,8 @@ def main():
                 # name is like '\x04g@\x04gNAME\x04g\x048/'
                 # make it like '@NAME'
                 line = gotname(result.group(1), result.group(2)[2] + result.group(2)[5:-5], result.group(3) + '\n')
+            else:
+                line = il.text_colorize(line, textmatcher, allocated)
 
             print(line, end='')
             sys.stdout.flush()

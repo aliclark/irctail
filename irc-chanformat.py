@@ -37,6 +37,8 @@ def main():
             result = chanmatcher.match(line)
             if result:
                 line = format_chan(result.group(3) + '\n', result.group(2))
+            else:
+                line = il.text_colorize(line, textmatcher, allocated)
             print(line, end='')
             sys.stdout.flush()
             line = sys.stdin.readline()

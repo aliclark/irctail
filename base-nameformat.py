@@ -34,6 +34,8 @@ def main():
             result = namematcher.match(line)
             if result:
                 line = gotname(result.group(1) + ' ', result.group(4), ' ' + result.group(5) + '\n', result.group(2))
+            else:
+                line = il.text_colorize(line, textmatcher, allocated)
 
             print(line, end='')
             sys.stdout.flush()
