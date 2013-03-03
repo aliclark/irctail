@@ -124,8 +124,17 @@ def getcolor(s, allocated, counts, hits):
 def text_colorize(after, textmatcher, allocated):
     for u,c in allocated.items():
         if u not in textmatcher:
-            textmatcher[u] = re.compile('((' + crankseq + ')|([^\w\-])|(^))(' + re.escape(u) + ')(([^\w\-])|($))', re.IGNORECASE)
+            # Make any preceding "#" characters optional in
+            # colorizing, since we most likely want to associate the
+            # channel name as a normal work with the full channel name
+            for i in xrange(len(u)):
+                if u[i] != '#':
+                    break
+            srch = re.escape(u)
+            if (len(u[0]) > 0) and (u[0] == '#'):
+                srch = '(' + srch[0:i*2] + ')?' + srch[i*2:]
+            textmatcher[u] = re.compile(r'((' + crankseq + r')|('+'\x04\x63'r')|([^\w\-'+'\x04'+r'])|(^))(' + srch + r')(([^\w\-])|($))', re.IGNORECASE)
 
-        after = re.sub(textmatcher[u], '\\1' + c + '\\5' + clearseq + '\\6', after)
+        after = re.sub(textmatcher[u], '\\1' + c + '\\6' + clearseq + '\\8', after)
 
     return after
