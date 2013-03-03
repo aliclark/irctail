@@ -7,12 +7,11 @@ The general idea is to tailf multiple irssi log files into a single one, and
 tailf from that into a pretty colorized file:
 
 user@host $ for x in irclogs/*; do tailf $x | sed /^/$x/ >>/tmp/irssitail & ; done
-user@host $ tailf /tmp/irssitail | irssitail.colorize.py >>/tmp/feed
 
 In practice this is implemented as:
 
 user@host $ while true; do ~/build/irctail/irctail-spawn.sh; sleep 10; done
-user@host $ cd ~/build/irctail/; ./irssi.aclark.theme.py &
+user@host $ tailf /tmp/irssitail | ./irssi-to-base.py | ./base-format.py | ./irc-colorize.py >>/tmp/feed
 
 The continuous loop above allows to pick up any channels you join later on.
 This could alternatively be put in a crontab.
@@ -27,12 +26,14 @@ lots of different (non IRC) things into /tmp/feed, and so only one instance of
 the output colorizer is needed, instead of one per channel.
 
 Put this (or similar) in .irssi/config:
+  core = {
+    log_timestamp = "%s ";
+  };
   "fe-common/core" = {
     autolog = "yes";
     autolog_level = "all -joins -parts -quits";
     autolog_colors = "yes";
   };
-
 
 Files:
 
@@ -45,29 +46,19 @@ irctail-reap.sh
   Only run this if you have rotating logs and want to kill tailf's on
   logs that have been rotated out.
 
+base-format.py
+  For any line in "base" format, performs right-alignment on names,
+  colorizes channel names and nicks as well as in text, and prints the
+  log time in human readable form.
+
+irssi-to-base.py
+  Converts some types of Irssi log line into a format that is easier
+  to parse ("base" format).
+
 irc-colorize.py
-  Interprets IRC color sequences and prints equivalent bash escape sequences
+  Interprets IRC color sequences and prints equivalent bash escape
+  sequences.
 
-irc-chanshift.py
-  Swaps the position of the timestamp and channel name
-
-irc-chanformat.py
-  Right aligns and colorizes channel names that were added by irctail-spawn.sh
-
-irssi-nameformat.py
-  Right aligns and colorizes user names, and occurrences of them in text
-
-irssi.aclark.theme.py
-  Pipes /tmp/irssitail through chanformat and colorize, outputting to /tmp/feed
-
-base-nameformat.py
-  Right aligns and colorizes user names, and occurrences of them in text
-
-base-timeformat.py
-  Replaces millistamps with HH:MM:SS format strings
-
-base.aclark.theme.py
-  Pipes /tmp/irctail through chanformat and colorize, outputting to /tmp/feed
 
 Improvements welcome :)
 
@@ -79,5 +70,4 @@ user@host $ printf '' >/tmp/feed; printf '' >/tmp/irssitail
 
 tail -F can be used with multiple files (instead of spawning one per log), but
 in that case we'd need to pipe into a program to reformat "==> #python.log <=="
-style lines, which is more faff than just using sed
-
+style lines, which is more faff than just using sed.
