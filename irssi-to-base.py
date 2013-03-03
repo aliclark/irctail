@@ -35,7 +35,7 @@ def meconvert(chan, ts, name, text):
     return chan + millistamp(ts) + '\t* ' + name + '\t' + text + '\n'
 
 def main():
-    chatmatcher  = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'g([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
+    chatmatcher  = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'([gc]|(>/))([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
     mematcher    = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+r'c \* ([^'+'\x04'+']+)'+'\x04'+'g (.*)')
     notifmatcher = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'9/-'+'\x04'+'g!'+'\x04'+'9/-'+'\x04'+'g '+'\x04'+'3/'+'([^'+'\x04'+']+)'+'\x04'+'g (.*)')
 
@@ -44,7 +44,7 @@ def main():
         while line:
             r = chatmatcher.match(line)
             if r:
-                line = chatconvert(r.group(1), r.group(2), r.group(3), r.group(4), r.group(5))
+                line = chatconvert(r.group(1), r.group(2), r.group(3), r.group(6), r.group(7))
             else:
                 r = notifmatcher.match(line)
                 if r:
