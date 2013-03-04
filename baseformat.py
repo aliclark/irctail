@@ -73,6 +73,8 @@ def combine_parts(channel, time, name, text):
     tcsep = ''
     if time and channel:
         tcsep = ' '
+    if not channel:
+        channel = ''
     return time + tcsep + channel + ' ' + name + ' ' + text
 
 splitter = re.compile(r'(([^\t]+)\t)?([^\t]+)\t([^\t]+)\t([^\t]+)')
