@@ -93,6 +93,7 @@ def main():
     clearseq = '\x1b[0m'
     printingstate = newlook()
     curstate = newlook()
+
     state = 0
     buf = None
     s3 = None
