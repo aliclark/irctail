@@ -20,7 +20,7 @@ def bingcheck(line):
         sub = re.sub(bingcheck_full, '\x16\\7\x16', line);
 
     if sub != line:
-        bingaling.sendmail(line)
+        bingaling.sendmail('aclark@localhost', line)
 
     return sub
 

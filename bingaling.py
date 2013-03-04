@@ -36,7 +36,7 @@ import baseformat
 # ~/mail/sendirc, where a script would look for any new messages
 # coming into the folder and send off an IRC message.
 #
-def sendmail(text):
+def sendmail(to, text):
     xtra = ''
     r = baseformat.splitter.match(text)
 
@@ -70,9 +70,9 @@ def sendmail(text):
         body = text
 
     # TODO: use a Python library for sending
-    ch = subprocess.Popen(['sendmail', 'ali@localhost'], stdin=subprocess.PIPE)
+    ch = subprocess.Popen(['sendmail', to], stdin=subprocess.PIPE)
 
-    full = ('To: ali@localhost' + '\n' +
+    full = ('To: ' + to + '\n' +
 'From: ' + fromstr + '\n' +
 'Subject: ' + subj +
 xtra +
