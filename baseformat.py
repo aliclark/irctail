@@ -75,14 +75,14 @@ def combine_parts(channel, time, name, text):
         tcsep = ' '
     return time + tcsep + channel + ' ' + name + ' ' + text
 
+splitter = re.compile(r'(([^\t]+)\t)?([^\t]+)\t([^\t]+)\t([^\t]+)')
+
 def main():
     try:
-        m = re.compile(r'(([^\t]+)\t)?([^\t]+)\t([^\t]+)\t([^\t]+)')
-
         line = sys.stdin.readline()
 
         while line:
-            r = m.match(line)
+            r = splitter.match(line)
 
             if r:
                 line = combine_parts(chanformat(r.group(2)),
