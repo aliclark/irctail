@@ -40,8 +40,10 @@ def chanformat(channel):
 
 nameformat_state = colorized_newstate()
 
-def nameformat(name):
+def nameformat_strip(name):
     leadstr = ''
+    uperm = ''
+
     for lead in ('--- ', '* '):
         if name.startswith(lead):
             leadstr = lead
@@ -50,11 +52,15 @@ def nameformat(name):
 
     for perm in ('@', '+', '%', '*'):
         if name.startswith(perm):
-            leadstr += perm
+            uperm = perm
             name = name[len(perm):]
             break
 
-    return colorized_text(nameformat_state, name, leadstr)
+    return (leadstr, uperm, name)
+
+def nameformat(name):
+    (leadstr, uperm, name) = nameformat_strip(name)
+    return colorized_text(nameformat_state, name, leadstr + uperm)
 
 def textformat(text):
     return il.text_colorize(il.text_colorize(text,
