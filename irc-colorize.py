@@ -312,7 +312,7 @@ def main():
                     else:
                         fg = c[1]['fg']
 
-                    if printingstate['bg'] == c[1]['bg']:
+                    if (not c[1]['bg']) or (printingstate['bg'] == c[1]['bg']):
                         bg = None
                     else:
                         bg = 'on_' + c[1]['bg']
