@@ -43,10 +43,10 @@ def error(x):
         print(x, file=sys.stderr)
 
 def newlook():
-    return {'bold':False,'fg':None,'bg':None}
+    return {'bold':False,'reverse':False,'fg':None,'bg':None}
 
 def lookeq(x, y):
-    return (x['bold'] == y['bold']) and (x['fg'] == y['fg']) and (x['bg'] == y['bg'])
+    return (x['bold'] == y['bold']) and (x['reverse'] == y['reverse']) and (x['fg'] == y['fg']) and (x['bg'] == y['bg'])
 
 defaultlook = newlook()
 
@@ -124,8 +124,8 @@ def main():
                             log('underline not implemented')
                             # '\x1b[0;4m'
                         elif c == '\x16':
-                            log('reverse not implemented')
-                            # '\x1b[0;7m'
+                            curstate = curstate.copy()
+                            curstate['reverse'] = not curstate['reverse']
                         elif c == '\x1f':
                             # same as underline?
                             # '\x1b[0;4m'
@@ -303,6 +303,7 @@ def main():
                 else:
                     if (lookeq(c[1], defaultlook) or
                         (printingstate['bold'] and (not c[1]['bold'])) or
+                        (printingstate['reverse'] and (not c[1]['reverse'])) or
                         (printingstate['fg'] and (not c[1]['fg'])) or
                         (printingstate['bg'] and (not c[1]['bg']))):
                         print(clearseq, end='')
@@ -317,11 +318,17 @@ def main():
                     else:
                         bg = 'on_' + c[1]['bg']
 
-                    if (printingstate['bold'] == c[1]['bold']) or (not c[1]['bold']):
-                        attrs = None
-                    else:
-                        attrs = []
+                    attrs = None
+
+                    if not ((printingstate['bold'] == c[1]['bold']) or (not c[1]['bold'])):
+                        if not attrs:
+                            attrs = []
                         attrs.append('bold')
+
+                    if not ((printingstate['reverse'] == c[1]['reverse']) or (not c[1]['reverse'])):
+                        if not attrs:
+                            attrs = []
+                        attrs.append('reverse')
 
                     printingstate = c[1]
 
