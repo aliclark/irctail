@@ -11,7 +11,7 @@ user@host $ for x in irclogs/*; do tailf $x | sed /^/$x/ >>/tmp/irssitail & ; do
 In practice this is implemented as:
 
 user@host $ while true; do ~/build/irctail/irctail-spawn.sh; sleep 10; done
-user@host $ tailf /tmp/irssitail | ./irssi-to-base.py | ./base-format.py | ./irc-colorize.py >>/tmp/feed
+user@host $ tailf /tmp/irssitail | ./irssi-to-base.py | ./baseformat.py | ./irc-colorize.py >>/tmp/feed
 
 The continuous loop above allows to pick up any channels you join later on.
 This could alternatively be put in a crontab.
@@ -46,7 +46,7 @@ irctail-reap.sh
   Only run this if you have rotating logs and want to kill tailf's on
   logs that have been rotated out.
 
-base-format.py
+baseformat.py
   For any line in "base" format, performs right-alignment on names,
   colorizes channel names and nicks as well as in text, and prints the
   log time in human readable form.
