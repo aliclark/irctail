@@ -226,10 +226,15 @@ def main():
                             s3.append(c)
                             state = 7
                         else:
-                            curstate = curstate.copy()
                             tmpx = parsefg(s3)
-                            curstate['fg'] = tmpx[0]
-                            curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            if tmpx:
+                                curstate = curstate.copy()
+                                curstate['fg'] = tmpx[0]
+                                curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            else:
+                                curstate['fg'] = None
+                                curstate['bold'] = False
+
                             state = 0
                             continue
 
@@ -241,10 +246,15 @@ def main():
                             state = 7
                         else:
                             # time to print using the new foreground
-                            curstate = curstate.copy()
                             tmpx = parsefg(s3)
-                            curstate['fg'] = tmpx[0]
-                            curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            if tmpx:
+                                curstate = curstate.copy()
+                                curstate['fg'] = tmpx[0]
+                                curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            else:
+                                curstate['fg'] = None
+                                curstate['bold'] = False
+
                             state = 0
                             continue
 
@@ -256,10 +266,15 @@ def main():
                             state = 8
                         else:
                             # the comma must have been text
-                            curstate = curstate.copy()
                             tmpx = parsefg(s3[:-1])
-                            curstate['fg'] = tmpx[0]
-                            curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            if tmpx:
+                                curstate = curstate.copy()
+                                curstate['fg'] = tmpx[0]
+                                curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            else:
+                                curstate['fg'] = None
+                                curstate['bold'] = False
+
                             buf.append((s3[-1], curstate))
                             state = 0
                             continue
@@ -267,10 +282,15 @@ def main():
                     elif state == 8:
                         if c.isdigit():
                             s3.append(c)
-                            curstate = curstate.copy()
                             tmpx = parsefg(s3)
-                            curstate['fg'] = tmpx[0]
-                            curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            if tmpx:
+                                curstate = curstate.copy()
+                                curstate['fg'] = tmpx[0]
+                                curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            else:
+                                curstate['fg'] = None
+                                curstate['bold'] = False
+
                             # TODO: can we involve "dark" on bg?
                             tmpx = parsebg(s3)
                             if tmpx:
@@ -279,10 +299,15 @@ def main():
                                 curstate['bg'] = None
                             state = 0
                         else:
-                            curstate = curstate.copy()
                             tmpx = parsefg(s3)
-                            curstate['fg'] = tmpx[0]
-                            curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            if tmpx:
+                                curstate = curstate.copy()
+                                curstate['fg'] = tmpx[0]
+                                curstate['bold'] = tmpx[1] if tmpx[1] else curstate['bold']
+                            else:
+                                curstate['fg'] = None
+                                curstate['bold'] = False
+
                             # TODO: can we involve "dark" on bg?
                             tmpx = parsebg(s3)
                             if tmpx:
