@@ -36,6 +36,7 @@ def meconvert(chan, ts, name, text):
 
 def main():
     chatmatcher  = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'([gc]|(>/))([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
+    bopmatcher   = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+r'8/-'+'\x04'+r'=/([^'+'\x04'+']+)'+'\x04'+'8/:'+'\x04'+'5/([^'+'\x04'+']+)'+'\x04'+'8/-'+'\x04'+'g '+'(.*)')
     mematcher    = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+r'c \* ([^'+'\x04'+']+)'+'\x04'+'g (.*)')
     notifmatcher = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'9/-'+'\x04'+'g!'+'\x04'+'9/-'+'\x04'+'g '+'\x04'+'3/'+'([^'+'\x04'+']+)'+'\x04'+'g (.*)')
 
@@ -48,15 +49,19 @@ def main():
                 line = chatconvert(r.group(1), r.group(2), r.group(3), r.group(6), r.group(7))
 
             else:
-                r = notifmatcher.match(line)
+                r = bopmatcher.match(line)
                 if r:
-                    line = notifconvert(r.group(1), r.group(2), r.group(3), r.group(4))
+                    line = chatconvert(r.group(1), r.group(2), ' ', '-' + r.group(3) + ':' + r.group(4) + '-', r.group(5))
 
                 else:
-                    r = mematcher.match(line)
+                    r = notifmatcher.match(line)
                     if r:
-                        line = meconvert(r.group(1), r.group(2), r.group(3), r.group(4))
+                        line = notifconvert(r.group(1), r.group(2), r.group(3), r.group(4))
 
+                    else:
+                        r = mematcher.match(line)
+                        if r:
+                            line = meconvert(r.group(1), r.group(2), r.group(3), r.group(4))
 
             print(line, end='')
             sys.stdout.flush()
