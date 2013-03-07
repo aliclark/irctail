@@ -41,18 +41,22 @@ def main():
 
     try:
         line = sys.stdin.readline()
+
         while line:
             r = chatmatcher.match(line)
             if r:
                 line = chatconvert(r.group(1), r.group(2), r.group(3), r.group(6), r.group(7))
+
             else:
                 r = notifmatcher.match(line)
                 if r:
                     line = notifconvert(r.group(1), r.group(2), r.group(3), r.group(4))
+
                 else:
                     r = mematcher.match(line)
                     if r:
                         line = meconvert(r.group(1), r.group(2), r.group(3), r.group(4))
+
 
             print(line, end='')
             sys.stdout.flush()
