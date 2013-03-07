@@ -14,8 +14,27 @@ import time
 # Other good formats to support would be:
 # YYYY-mm-DD HH:MM:SS( +NNNN)?
 # HH:MM(:SS)?
-def millistamp(timestamp):
-    return timestamp + '000'
+# Day, (N)?N Mon YYYY HH:MM:SS( +NNNN)?
+
+timestamp_match = re.compile(r'^\d+$')
+time_match = re.compile(r'^([0-2][0-9]):([0-5][0-9])(:([0-6][0-9]))?$')
+
+def millistamp(t):
+    r = timestamp_match.match(t)
+    if r:
+        return t + '000'
+
+    r = time_match.match(t)
+    if r:
+        h = r.group(1)
+        m = r.group(2)
+        s = r.group(4)
+        dt = datetime.datetime.now().replace(hour=int(h), minute=int(m), second=0, microsecond=0)
+        if s != None:
+            dt = dt.replace(second=int(s))
+        return str(int(round(time.mktime(dt.timetuple()) * 1000)))
+
+    return str(int(round(time.time() * 1000)))
 
 def chatconvert(chan, ts, perm, name, text):
     if not chan:
@@ -35,10 +54,10 @@ def meconvert(chan, ts, name, text):
     return chan + millistamp(ts) + '\t* ' + name + '\t' + text + '\n'
 
 def main():
-    chatmatcher  = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'([gc]|(>/))([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
-    bopmatcher   = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+r'8/-'+'\x04'+r'=/([^'+'\x04'+']+)'+'\x04'+'8/:'+'\x04'+'5/([^'+'\x04'+']+)'+'\x04'+'8/-'+'\x04'+'g '+'(.*)')
-    mematcher    = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+r'c \* ([^'+'\x04'+']+)'+'\x04'+'g (.*)')
-    notifmatcher = re.compile(r'([^\t]+\t)?(\d+) '+'\x04'+'9/-'+'\x04'+'g!'+'\x04'+'9/-'+'\x04'+'g '+'\x04'+'3/'+'([^'+'\x04'+']+)'+'\x04'+'g (.*)')
+    chatmatcher  = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'([gc]|(>/))([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
+    bopmatcher   = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+r'8/-'+'\x04'+r'=/([^'+'\x04'+']+)'+'\x04'+'8/:'+'\x04'+'5/([^'+'\x04'+']+)'+'\x04'+'8/-'+'\x04'+'g '+'(.*)')
+    mematcher    = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+r'c \* ([^'+'\x04'+']+)'+'\x04'+'g (.*)')
+    notifmatcher = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+'9/-'+'\x04'+'g!'+'\x04'+'9/-'+'\x04'+'g '+'\x04'+'3/'+'([^'+'\x04'+']+)'+'\x04'+'g (.*)')
 
     try:
         line = sys.stdin.readline()
