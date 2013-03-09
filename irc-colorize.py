@@ -10,6 +10,9 @@ import termcolor_1_1_0 as termcolor
 # Good resource for mIRC colors:
 # http://www.mirc.com/colors.html
 
+# TODO: implement a PUSH and a POP code sequence, somewhere that
+# doesn't clash with existing stuff
+
 # TODO: fill in the gaps
 irssi_fgattrs = {
     '\x32': (False, 'green'),
