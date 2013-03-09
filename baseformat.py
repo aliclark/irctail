@@ -7,9 +7,9 @@ import re
 import datetime
 import ircformatlib as il
 
-timeformat_format    = '%H:%M:%S'
-timeformat_formatlen = 8
-timeformat_filler    = ' ' * timeformat_formatlen
+# Allow this to be supplied as an option?
+timeformat_format = '%H:%M:%S'
+timeformat_filler = ' ' * len(datetime.datetime.now().strftime(timeformat_format))
 
 def timeformat(time):
     try:
