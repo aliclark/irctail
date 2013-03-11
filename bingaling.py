@@ -7,6 +7,7 @@ import subprocess
 import datetime
 
 import baseformat
+import irccolor
 
 # There are multiple purposes of this program:
 
@@ -69,15 +70,18 @@ def sendmail(to, text):
         subj = text
         body = text
 
+    plainsubj = ''.join(map(lambda c: c[0], irccolor.colorize(subj)))
+    plainbody = ''.join(map(lambda c: c[0], irccolor.colorize(body)))
+
     # TODO: use a Python library for sending
     ch = subprocess.Popen(['sendmail', to], stdin=subprocess.PIPE)
 
     full = ('To: ' + to + '\n' +
 'From: ' + fromstr + '\n' +
-'Subject: ' + subj +
+'Subject: ' + plainsubj +
 xtra +
 '\n' +
-body)
+plainbody)
 
     ch.stdin.write(full)
 
