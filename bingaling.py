@@ -57,7 +57,9 @@ def sendmail(to, text):
         if leadstr:
             userstr = leadstr + uperm + nick
         else:
-            userstr = '<' + uperm + nick + '>'
+            userstr = uperm + nick
+            if not (nick.startswith('-') and nick.endswith('-')):
+                userstr = '<' + userstr + '>'
 
         if channel:
             xtra += 'X-BingChan: ' + channel + '\n'
