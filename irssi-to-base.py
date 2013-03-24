@@ -67,6 +67,14 @@ def meconvert(chan, ts, name, text):
         chan = ''
     return chan + millistamp(ts) + '\t* ' + name + '\t' + text + '\n'
 
+# Possibly rewrite the following from:
+#github	22:50:41 9/-g!9/-g cIrssi:c Join to c#githubc was synced in c306c secs
+# to:
+#github\t22:50:41\t--- Irssi:\tJoin to ^Dc#github^Dc was synced in ^Dc306^Dc secs
+#
+# I'm really unsure about this, because it could be confusing if there
+# is actually a user named "Irssi".
+
 def main():
     chatmatcher  = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+'8/<'+'\x04'+'g(.)'+'\x04'+'([gc]|(>/))([^'+'\x04'+']+)'+'\x04'+'g'+'\x04'+'8/>'+'\x04'+'g '+'\x04'+'e'+'(.*)')
     bopmatcher   = re.compile(r'([^\t]+\t)?([^'+'\x04'+']+) '+'\x04'+r'8/-'+'\x04'+r'=/([^'+'\x04'+']+)'+'\x04'+'8/:'+'\x04'+'5/([^'+'\x04'+']+)'+'\x04'+'8/-'+'\x04'+'g '+'(.*)')
