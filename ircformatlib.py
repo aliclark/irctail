@@ -15,13 +15,6 @@
 
 import re
 
-# TODO: use only minimal sequences necessary
-# ^Cf  if the name starts with a non-digit, non-comma character (and fg
-#      is <10) or the comma is followed by a non-digit
-# ^Cff if the name starts with a non-comma character or the comma is
-#      followed by a non-digit
-# ^Cff,99 otherwise
-
 # TODO: allow a list of colours we shouldn't use for highlighting,
 # because they would normally clash on the background colour
 forbidden = []
@@ -50,6 +43,13 @@ def uplogs(color, hits):
 # private
 def ch(c):
     return '\x03' + pallette[c] + ',99'
+
+# TODO: use only minimal sequences necessary
+# ^Cf  if the name starts with a non-digit, non-comma character (and fg
+#      is <10) or the comma is followed by a non-digit
+# ^Cff if the name starts with a non-comma character or the comma is
+#      followed by a non-digit
+# ^Cff,99 otherwise
 
 def pick_color(name, allocated, counts, hits):
     l = len(name)
