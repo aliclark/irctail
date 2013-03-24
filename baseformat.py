@@ -45,6 +45,8 @@ def colorized_text(state, text, leadstr=''):
     return (il.getmaxpad(leadstr + text, state['maxlen']) + leadstr +
             color + text + il.clearseq)
 
+# TODO: possibly allow "save state to disk" and "load state from disk"
+# as program options.
 chanformat_state = colorized_newstate()
 
 def chanformat(channel):
