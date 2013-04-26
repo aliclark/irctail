@@ -94,10 +94,10 @@ def sendmail(to, text):
 
     full = ('To: ' + to + '\n' +
 'From: ' + fromstr + '\n' +
-'Subject: ' + plainsubj +
+'Subject: ' + plainsubj + '\n' +
 xtra +
 '\n' +
-plainbody)
+plainbody + '\n')
 
     ch.stdin.write(full)
 

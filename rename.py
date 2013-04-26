@@ -40,8 +40,7 @@ def main():
             r = baseformat.splitter.match(line)
             if r:
                 print(r.group(1) + r.group(3) + '\t' + rename(r.group(4)) +
-                      '\t' + r.group(5),
-                      end='')
+                      '\t' + r.group(5))
             else:
                 print(line, end='')
             sys.stdout.flush()
