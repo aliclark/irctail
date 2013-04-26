@@ -147,7 +147,10 @@ def text_colorize(after, textmatcher, allocated):
             srch = re.escape(u)
             if (len(u[0]) > 0) and (u[0] == '#'):
                 srch = '(' + srch[0:i*2] + ')?' + srch[i*2:]
-            textmatcher[u] = re.compile(r'((' + crankseq + r')|('+'\x04\x63'r')|([^\w\-'+'\x04'+r'])|(^))(' + srch + r')(([^\w\-])|($))', re.IGNORECASE)
+            else:
+                # srch must have same number of groups regardless
+                srch = '()?' + srch[i*2:]
+            textmatcher[u] = re.compile(r'((' + crankseq + r')|('+'\x04\x63'r')|([^\w\-'+'\x04'+r'])|(^))(' + srch + r')([^\w\-]|$)', re.IGNORECASE)
 
         after = re.sub(textmatcher[u], '\\1' + c + '\\6' + clearseq + '\\8', after)
 
