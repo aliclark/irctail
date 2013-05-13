@@ -93,7 +93,7 @@ def combine_parts(channel, time, name, text):
         channel = ''
     return time + tcsep + channel + ' ' + name + ' ' + text
 
-splitter = re.compile(r'^(([^\t]+)\t)?([^\t]+)\t([^\t]+)\t(.+)$')
+splitter = re.compile(r'^(([^\t]+)\t)?([^\t]+)\t([^\t]+)\t(.*)$')
 
 def main():
     try:
