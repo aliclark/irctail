@@ -103,14 +103,15 @@ def main():
             r = splitter.match(line)
 
             if r:
-                line = combine_parts(chanformat(r.group(2)),
+                line = (combine_parts(chanformat(r.group(2)),
                                      timeformat(r.group(3)),
                                      nameformat(r.group(4)),
-                                     textformat(r.group(5)))
+                                     textformat(r.group(5))) +
+                        '\n')
             else:
                 line = textformat(line)
 
-            print(line)
+            print(line, end='')
             sys.stdout.flush()
             line = sys.stdin.readline()
 
